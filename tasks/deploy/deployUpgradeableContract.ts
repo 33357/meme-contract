@@ -1,9 +1,9 @@
 import '@nomiclabs/hardhat-ethers';
-import { task } from 'hardhat/config';
-import { HardhatRuntimeEnvironment } from 'hardhat/types';
-import { getImplementationAddress } from '@openzeppelin/upgrades-core';
-import { PayableOverrides } from 'ethers';
-import { getDeployment, setDeployment, log } from '../utils';
+import {task} from 'hardhat/config';
+import {HardhatRuntimeEnvironment} from 'hardhat/types';
+import {getImplementationAddress} from '@openzeppelin/upgrades-core';
+import {PayableOverrides} from 'ethers';
+import {getDeployment, setDeployment, log} from '../utils';
 
 task(`upgradeableContract:deploy`, `deploy upgradeableContract`)
   .addOptionalParam('name', 'The contract name')
@@ -31,18 +31,17 @@ task(`upgradeableContract:deploy`, `deploy upgradeableContract`)
     const operator = (await hre.ethers.getSigners())[0];
 
     log(
-      `deploy ${contractName}, operator:${operator.address
+      `deploy ${contractName}, operator:${
+        operator.address
       }, args:${JSON.stringify(contractArgs)}, config: ${JSON.stringify(
         txConfig
       )}`
     );
 
     const Contract = await hre.ethers.getContractFactory(contractName);
-    const contract = await hre.upgrades.deployProxy(
-      Contract,
-      contractArgs,
-      { kind: 'uups' }
-    );
+    const contract = await hre.upgrades.deployProxy(Contract, contractArgs, {
+      kind: 'uups',
+    });
     const deployed = await contract.deployTransaction.wait();
     const contractProxyAddress = deployed.contractAddress;
     const contractImplAddress = await getImplementationAddress(

@@ -34,7 +34,7 @@ if (privateKey) {
 
 const config: HardhatUserConfig = {
   solidity: {
-    version: '0.8.17',
+    version: '0.8.20',
     settings: {
       optimizer: {
         enabled: true,

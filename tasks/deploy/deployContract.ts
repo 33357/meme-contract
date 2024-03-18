@@ -8,10 +8,7 @@ task(`contract:deploy`, `Deploy contract`)
   .addOptionalParam('name', 'The contract name')
   .addOptionalParam('args', 'The contract args')
   .addOptionalParam('gasPrice', 'The gasPrice to transaction')
-  .addOptionalParam(
-    'maxFeePerGas',
-    'The maxFeePerGas to transaction'
-  )
+  .addOptionalParam('maxFeePerGas', 'The maxFeePerGas to transaction')
   .setAction(async (args, hre: HardhatRuntimeEnvironment) => {
     const chainId = (await hre.ethers.provider.getNetwork()).chainId;
     const txConfig: PayableOverrides = {};

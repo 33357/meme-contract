@@ -1109,6 +1109,27 @@
     "@types/bn.js" "*"
     "@types/underscore" "*"
 
+"@uniswap/lib@4.0.1-alpha":
+  version "4.0.1-alpha"
+  resolved "https://registry.yarnpkg.com/@uniswap/lib/-/lib-4.0.1-alpha.tgz#2881008e55f075344675b3bca93f020b028fbd02"
+  integrity sha512-f6UIliwBbRsgVLxIaBANF6w09tYqc6Y/qXdsrbEmXHyFA7ILiKrIwRFXe1yOg8M3cksgVsO9N7yuL2DdCGQKBA==
+
+"@uniswap/v2-core@1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@uniswap/v2-core/-/v2-core-1.0.0.tgz#e0fab91a7d53e8cafb5326ae4ca18351116b0844"
+  integrity sha512-BJiXrBGnN8mti7saW49MXwxDBRFiWemGetE58q8zgfnPPzQKq55ADltEILqOt6VFZ22kVeVKbF8gVd8aY3l7pA==
+
+"@uniswap/v2-core@https://github.com/Uniswap/v2-core":
+  version "1.0.1"
+  resolved "https://github.com/Uniswap/v2-core#ee547b17853e71ed4e0101ccfd52e70d5acded58"
+
+"@uniswap/v2-periphery@https://github.com/Uniswap/v2-periphery":
+  version "1.1.0-beta.0"
+  resolved "https://github.com/Uniswap/v2-periphery#0335e8f7e1bd1e8d8329fd300aea2ef2f36dd19f"
+  dependencies:
+    "@uniswap/lib" "4.0.1-alpha"
+    "@uniswap/v2-core" "1.0.0"
+
 "@yarnpkg/lockfile@^1.1.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@yarnpkg/lockfile/-/lockfile-1.1.0.tgz#e77a97fbd345b76d83245edcd17d393b1b41fb31"
@@ -3666,7 +3687,7 @@ ethereumjs-wallet@0.6.5:
     utf8 "^3.0.0"
     uuid "^3.3.2"
 
-ethers@^5.0.1, ethers@^5.0.2, ethers@^5.5.2, ethers@^5.6.6:
+ethers@^5.0.1, ethers@^5.0.2, ethers@^5.4.6, ethers@^5.5.2:
   version "5.7.2"
   resolved "https://registry.yarnpkg.com/ethers/-/ethers-5.7.2.tgz#3a7deeabbb8c030d4126b24f84e525466145872e"
   integrity sha512-wswUsmWo1aOK8rR7DIKiWSw9DbLWe6x98Jrn8wcTflTVvaXhAMaB5zGAXy0GYQEQp9iO1iSHWVyARQm11zUtyg==
