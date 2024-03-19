@@ -8,11 +8,11 @@ import "@uniswap/v2-periphery/contracts/interfaces/IWETH.sol";
 
 contract AVAXMEME is ERC20 {
     // deadline 为 3 天后
-    uint256 public deadline = block.timestamp + 3 days;
+    uint256 public immutable deadline = block.timestamp + 3 days;
     // 退款时间为 deadline 之后 1 小时
-    uint256 public refundTime = deadline + 1 hours;
-    // 最低额度 1000 AVAX
-    uint256 public minAVAX = 1000;
+    uint256 public immutable refundTime = block.timestamp + 3 days + 1 hours;
+    // 目标额度为 1000 AVAX
+    uint256 public immutable targetAmount = 1000 ether;
     // LP 是否开启，默认为 false
     bool public LPopen;
 
@@ -20,23 +20,29 @@ contract AVAXMEME is ERC20 {
     constructor() ERC20("AVAXMEME", "AVME") {}
 
     receive() external payable {
-        // 低于 1 AVAX 或高于 100 AVAX 都不接收
-        require(msg.value >= 1 ether && msg.value <= 100 ether, "too rich or too small");
-        // deadline 之后不接收 AVAX 转账
-        require(block.timestamp < deadline, "too late");
-        // 冲 1 个 AVAX 送 10000 个 AVAXMEME
+        // 不能低于 1 AVAX
+        require(msg.value >= 1 ether, "less than 1 AVAX");
+        // 不能高于 100 AVAX
+        require(msg.value <= 100 ether, "greater than 100 AVAX");
+        // 要在截止日期之前
+        require(block.timestamp < deadline, "deadline reached");
+        // 1 个 AVAX 送 10000 个 AVAXMEME
         _mint(msg.sender, 10000 * msg.value);
+        // 单个账户额度不能高于 100 AVAX
+        require(balanceOf(msg.sender) <= 10000 * 100 ether, "reached limit of 100 AVAX");
     }
 
-    function _transfer(address from, address to, uint256 amount) internal override {
+    function _transfer(address from, address to, uint256 amount) override internal {
         // LPopen 为 true 才能转账
-        require(LPopen, "LP not open");
+        require(LPopen, "wait LP open");
         super._transfer(from, to, amount);
     }
 
     function _refund(address sender) internal {
-        // refundTime 之后还没有开启 LP 才能退款
-        require(block.timestamp >= refundTime && !LPopen, "too early");
+        // 需要在 refundTime 之后
+        require(block.timestamp >= refundTime, "wait refundTime");
+        // 不能在 LP 开启后
+        require(!LPopen, "LP opened");
         uint256 balance = balanceOf(sender);
         // 回收 AVAXMEME
         _burn(sender, balance);
@@ -57,11 +63,13 @@ contract AVAXMEME is ERC20 {
     }
 
     function openLP() external {
-        // deadline 之前不能开启 LP，openLP 只能调用一次
-        require(block.timestamp >= deadline && !LPopen, "too early");
+        // deadline 之前不能开启 LP
+        require(block.timestamp >= deadline,"wait deadline");
+        // 不能在 LP 开启后
+        require(!LPopen, "LP opened");
         uint256 amountWAVAX = address(this).balance;
-        // 最低额度达不到不能开启 LP
-        require(amountWAVAX >= minAVAX, "balance not reached");
+        // 达不到目标额度不能开启 LP
+        require(amountWAVAX >= targetAmount, "target not reached");
         IWETH WAVAX = IWETH(0xB31f66AA3C1e785363F0875A1B74E27b85FD66c7);
         // 创建 uniswapV2 的池子
         address pair = IUniswapV2Factory(0x9e5A52f57b3038F1B8EeE45F28b3C1967e22799C).createPair(

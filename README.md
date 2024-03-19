@@ -24,7 +24,7 @@ yarn test -vvvv
 
 forge fork test
 ```bash
-source envs/eth.env
+source envs/avax.env
 
 yarn test -vvvv --fork-url $PROVIDER
 ```
